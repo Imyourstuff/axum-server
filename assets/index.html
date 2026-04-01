@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rust + Axum</title>
+</head>
+<body>
+    <h1>Hello ???</h1>
+    <form id="userForm">
+        <label for="name">Ваше имя:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="lastname">Ваша фамилия:</label>
+        <input type="text" id="lastName" name="lastName" required>
+    </form>
+    <button id="sendButton">Отправить</button>
+    <div id="resultName" style="margin-top:20px;"></div>
+
+    <form id="calcForm">
+        <label for="first">Введите циферки</label>
+        <input type="text" id="left" name="left" required>
+        <label for="lastname">+</label>
+        <input type="text" id="right" name="right" required>
+        <h6>=</h6>
+        <div id="calcResult" style="margin-top:20px;"></div>
+    </form>
+    <button id="calcButton">Сложить</button>
+    
+
+    <script>
+        document.getElementById('sendButton').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const lastName = document.getElementById('lastName').value;
+            const response = await fetch('/user/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, lastName })
+            });
+            
+            const resultDiv = document.getElementById('resultName');
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML = `<p style="color:green;">${data.name} ${data.lastName}</p>`;
+            } else {
+                const error = await response.json();
+                resultDiv.innerHTML = `<p style="color:red;">Ошибка: ${error.error || 'неизвестная ошибка'}</p>`;
+            }
+        });
+
+        document.getElementById('calcButton').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const right = Number(document.getElementById('right').value);
+            const left = Number(document.getElementById('left').value);
+            const response = await fetch('/user/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ right, left })
+            });
+            
+            const resultDiv = document.getElementById('calcResult');
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML = `<p style="color:green;">${data.sum}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

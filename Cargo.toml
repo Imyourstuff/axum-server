@@ -1,0 +1,22 @@
+[package]
+name = "axum-server"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[profile.release]
+strip = true          # удалить символы
+opt-level = "z"       # оптимизировать по размеру
+lto = true            # link-time optimization
+codegen-units = 1     # для лучшей оптимизации
+
+[dependencies]
+axum = "0.8.8"
+diesel = { version = "2.3.7", features = ["postgres"]}
+dotenvy = "0.15.7"
+serde = {version = "1.0.228", features = ["derive"]}
+serde_json = "1.0.149"
+tokio = { version = "1.0", features = ["full"] }
+tower = { version = "0.5.2", features = ["util"] }
+tower-http = { version = "0.6.1", features = ["fs", "trace"] }
+uuid = "1.21.0"
