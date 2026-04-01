@@ -11,7 +11,10 @@ pipeline {
 		stage("test") {
 			echo "Testing the application"
 		}
-		stage("deploy") {echo "Deploying successfull!"}
+		
+		stage("deploy") {
+			echo "Deploying successfull!"
+		}
 	
 	}
 
