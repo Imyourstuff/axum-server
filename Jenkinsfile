@@ -41,7 +41,7 @@ pipeline {
 				withCredentials({
 					usernamePassword(credentials: 'docker-hub-repo', usernameVariable: USER, passwordVariable: PWD)
 				}) {
-					sh "some script $(USER) $(PWD)"
+					sh "echo $(USER) $(PWD)"
 				}
 			}
 		}
