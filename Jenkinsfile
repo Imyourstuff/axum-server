@@ -1,4 +1,6 @@
 
+def gv
+
 pipeline {
 	
 	agent any
@@ -16,11 +18,18 @@ pipeline {
 		SERVER_CREDENTIALS = credentials('docker-hub-repo')
 	}
 	stages {
-
+		stage("init") {
+					steps {
+						script {
+							gv = load "script.groovy"
+						}
+					}
+				}
 		stage("build") {
 			steps {
-				echo 'Building the application'
-				echo "Building version ${NEW_VERSION}"
+				script {
+					gv.buildApp()
+				}
 			}
 		}
 
@@ -31,7 +40,9 @@ pipeline {
 				}
 			}
 			steps {
-				echo "Testing the application"
+				script {
+					gv.testApp()
+				}
 			}
 		}
 		
@@ -41,6 +52,9 @@ pipeline {
 					usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PWD')
 				]) {
 					sh "echo $USER $PWD"
+				}
+				script {
+					gv.deployApp()
 				}
 			echo "Deploying successfull! Version: ${params.VERSION}"
 			}
