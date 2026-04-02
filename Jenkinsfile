@@ -42,8 +42,8 @@ pipeline {
 				}) {
 					sh "echo ${USER} ${PWD}"
 				}
-			}
 			echo "Deploying successfull! Version: ${params.VERSION}"
+			}
 		}
 	
 	}
