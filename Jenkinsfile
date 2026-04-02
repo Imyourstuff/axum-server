@@ -20,7 +20,7 @@ pipeline {
 		stage("build") {
 			steps {
 				echo 'Building the application'
-				echo "Building version $(NEW_VERSION)"
+				echo "Building version ${NEW_VERSION}"
 			}
 		}
 
@@ -37,11 +37,11 @@ pipeline {
 		
 		stage("deploy") {
 			steps {
-				echo "Deploying successfull! Version: $(params.VERSION)"
+				echo "Deploying successfull! Version: ${params.VERSION}"
 				withCredentials({
 					usernamePassword(credentials: 'docker-hub-repo', usernameVariable: USER, passwordVariable: PWD)
 				}) {
-					sh "echo $(USER) $(PWD)"
+					sh "echo ${USER} ${PWD}"
 				}
 			}
 		}
