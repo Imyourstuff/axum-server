@@ -40,7 +40,7 @@ pipeline {
 				withCredentials([
 					usernamePassword(credentials: 'docker-hub-repo', usernameVariable: USER, passwordVariable: PWD)
 				]) {
-					sh "echo ${env.USER} ${env.PWD}"
+					sh "echo $USER $PWD"
 				}
 			echo "Deploying successfull! Version: ${params.VERSION}"
 			}
