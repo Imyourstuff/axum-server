@@ -37,9 +37,9 @@ pipeline {
 		
 		stage("deploy") {
 			steps {
-				withCredentials({
+				withCredentials([
 					usernamePassword(credentials: 'docker-hub-repo', usernameVariable: USER, passwordVariable: PWD)
-				}) {
+				]) {
 					sh "echo ${USER} ${PWD}"
 				}
 			echo "Deploying successfull! Version: ${params.VERSION}"
