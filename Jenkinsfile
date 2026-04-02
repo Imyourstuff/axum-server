@@ -38,7 +38,7 @@ pipeline {
 		stage("deploy") {
 			steps {
 				withCredentials([
-					usernamePassword(credentials: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PWD')
+					usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PWD')
 				]) {
 					sh "echo $USER $PWD"
 				}
