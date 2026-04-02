@@ -47,9 +47,11 @@ pipeline {
 		}
 	
 	}
-	post {
-		always {}
-		failure {}
-	}
+//	post {
+//		always {
+//			sh 
+//		}
+//		failure {}
+//	}
 
 }
