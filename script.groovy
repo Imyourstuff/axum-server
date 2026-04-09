@@ -7,6 +7,6 @@ def testApp() {
 }
 
 def deployApp() {
-    echo "deploy the app versiob ${params.VERSION}"
+    echo "deploy the app version ${params.VERSION}"
 }
 return this
