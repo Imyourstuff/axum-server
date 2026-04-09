@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     stages {
         //Trying to build cargo from docker agent.
         stage("Cargo build Rust") {
