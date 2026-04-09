@@ -24,7 +24,7 @@ pipeline {
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
-            
+
             environment {
                 HOME = "${WORKSPACE}" 
             }
@@ -40,7 +40,7 @@ pipeline {
                         )
                     ]) {
                         sh 'docker build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
-                        sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                        sh 'echo $PASSWORD | docker login -u $USER --password-stdin'
                         sh 'docker push kayorie/learning_docker_rx7:jenkins-pipeline'
                     }
                 }
