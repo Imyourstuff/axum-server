@@ -1,12 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'rust:latest'
-        }
-    }
     stages {
         //Trying to build cargo from docker agent.
         stage("Cargo build Rust") {
+            agent {
+                docker {
+                    image 'rust:latest'
+                }
+            }
             steps {
                 script {
                     echo "Build started..."
@@ -15,18 +15,15 @@ pipeline {
             }
         }
 
-        stage('Diagnostic') {
-            steps {
-                sh '''
-                    echo "PATH=$PATH"
-                    which docker || echo "docker not in PATH"
-                    ls -la /usr/bin/docker 2>/dev/null || echo "No /usr/bin/docker"
-                    ls -la /usr/local/bin/docker 2>/dev/null || echo "No /usr/local/bin/docker"
-                    '''
-            }
-        }
         //Building image 
         stage("Build image") {
+            agent {
+                docker {
+                    image 'docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+
             steps {
                 script {
                     echo "Building docker image."
