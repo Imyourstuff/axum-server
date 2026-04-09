@@ -1,7 +1,16 @@
+def gv
+
 pipeline {
     agent any
     stages {
         //Trying to build cargo from docker agent.
+        stage("Initialize Groovy script") {
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
         stage("Cargo build Rust") {
             agent {
                 docker {
@@ -10,8 +19,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Build started..."
-                    sh "cargo build --release"
+                    gv.cargoBuild()
                 }
             }
         }
@@ -31,18 +39,7 @@ pipeline {
 
             steps {
                 script {
-                    echo "Building docker image."
-                    withCredentials([
-                        usernamePassword(
-                            credentialsId: 'docker-hub-repo',
-                            passwordVariable: 'PASSWORD',
-                            usernameVariable: 'USER'
-                        )
-                    ]) {
-                        sh 'docker build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
-                        sh 'echo $PASSWORD | docker login -u $USER --password-stdin'
-                        sh 'docker push kayorie/learning_docker_rx7:jenkins-pipeline'
-                    }
+                    gv.buildAndPushImage()
                 }
             }
         }
