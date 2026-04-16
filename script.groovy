@@ -5,7 +5,7 @@ def cargoBuild() {
         sudo podman run --rm \
             -v ${WORKSPACE}:${WORKSPACE}:Z \
             -w ${WORKSPACE} \
-            rust:latest \
+            docker.io/rust:latest \
             cargo build --release
     """
 }
@@ -24,7 +24,7 @@ def buildAndPushImage() {
         // Логин в Docker Hub (podman поддерживает --password-stdin)
         sh 'echo $PASSWORD | podman login -u $USER --password-stdin'
         // Публикация образа
-        sh 'podman push kayorie/learning_docker_rx7:jenkins-pipeline'
+        sh 'podman push docker.io/kayorie/learning_docker_rx7:jenkins-pipeline'
     }
 }
 
