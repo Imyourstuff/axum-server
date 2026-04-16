@@ -1,11 +1,7 @@
-def gv
-
-
-//Comment to test branches
 pipeline {
     agent any
+
     stages {
-        //Trying to build cargo from docker agent.
         stage("Initialize Groovy script") {
             steps {
                 script {
@@ -13,12 +9,8 @@ pipeline {
                 }
             }
         }
+
         stage("Cargo build Rust") {
-            agent {
-                docker {
-                    image 'rust:latest'
-                }
-            }
             steps {
                 script {
                     gv.cargoBuild()
@@ -26,32 +18,24 @@ pipeline {
             }
         }
 
-        //Building image 
         stage("Build image") {
-            agent {
-                docker {
-                    image 'docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
-
             environment {
-                HOME = "${WORKSPACE}" 
+                HOME = "${WORKSPACE}"   // необходимо для rootless Podman
             }
-
             steps {
                 script {
                     gv.buildAndPushImage()
                 }
             }
         }
+
         stage("Deploy!") {
             steps {
                 script {
                     echo "Deploying the app!"
+                    // при желании: gv.deployApp()
                 }
             }
         }
     }
 }
-
