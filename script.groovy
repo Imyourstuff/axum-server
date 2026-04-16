@@ -2,7 +2,7 @@ def cargoBuild() {
     echo 'Build started.'
     // Запускаем сборку внутри контейнера rust:latest с помощью podman
     sh """
-        podman run --rm \
+        sudo podman run --rm \
             -v ${WORKSPACE}:${WORKSPACE}:Z \
             -w ${WORKSPACE} \
             rust:latest \
