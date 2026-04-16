@@ -2,7 +2,7 @@ def cargoBuild() {
     echo 'Build started.'
     // Запускаем сборку внутри контейнера rust:latest с помощью podman
     sh """
-        sudo podman run --rm \
+        sudo podman --remote run --rm \
             -v ${WORKSPACE}:${WORKSPACE}:Z \
             -w ${WORKSPACE} \
             docker.io/rust:latest \
@@ -20,11 +20,11 @@ def buildAndPushImage() {
         )
     ]) {
         // Сборка образа через podman
-        sh 'podman build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
+        sh 'podman --remote build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
         // Логин в Docker Hub (podman поддерживает --password-stdin)
         sh 'echo $PASSWORD | podman login -u $USER --password-stdin'
         // Публикация образа
-        sh 'podman push docker.io/kayorie/learning_docker_rx7:jenkins-pipeline'
+        sh 'podman --remote push docker.io/kayorie/learning_docker_rx7:jenkins-pipeline'
     }
 }
 
