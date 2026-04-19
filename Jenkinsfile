@@ -31,7 +31,7 @@ pipeline {
             agent {
                 docker {
                     image 'quay.io/podman/stable:latest'
-                    args '-v /run/podman/podman.sock:/var/run/docker.sock'
+                    args '-u root -v /run/podman/podman.sock:/var/run/docker.sock'
                 }
             }
 
