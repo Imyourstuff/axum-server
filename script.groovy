@@ -7,7 +7,7 @@ def buildAndPushImage() {
     echo "Building docker image."
     withCredentials([
     usernamePassword(
-        credentialsId: 'docker-hub-repo',
+        credentialsId: 'docker',
         passwordVariable: 'PASSWORD',
         usernameVariable: 'USER'
     )
