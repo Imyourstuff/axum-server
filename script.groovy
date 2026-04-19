@@ -12,9 +12,9 @@ def buildAndPushImage() {
         usernameVariable: 'USER'
     )
     ]) {
-    sh 'docker build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
+    sh 'sudo docker build -t kayorie/learning_docker_rx7:jenkins-pipeline .'
     sh 'echo $PASSWORD | docker login -u $USER --password-stdin'
-    sh 'docker push kayorie/learning_docker_rx7:jenkins-pipeline'
+    sh 'sudo docker push kayorie/learning_docker_rx7:jenkins-pipeline'
     }
 }
 
