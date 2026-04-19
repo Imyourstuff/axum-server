@@ -28,12 +28,6 @@ pipeline {
 
         //Building image 
         stage("Build image") {
-            agent {
-                docker {
-                    image 'quay.io/podman/stable:latest'
-                    args '-u root -v /run/podman/podman.sock:/run/podman/podman.sock'
-                }
-            }
 
             environment {
                 HOME = "${WORKSPACE}" 
