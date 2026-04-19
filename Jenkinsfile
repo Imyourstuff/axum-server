@@ -17,7 +17,7 @@ pipeline {
         stage("Build image") {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-repo',
+                    credentialsId: 'docker',
                     passwordVariable: 'PASSWORD',
                     usernameVariable: 'USER'
                 )]) {
