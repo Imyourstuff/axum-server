@@ -1,33 +1,56 @@
+def gv
+
+//Comment to test branches
 pipeline {
     agent any
-
     stages {
-        stage("Build Rust") {
+        //Trying to build cargo from docker agent.
+        stage("Initialize Groovy script") {
             steps {
-                sh '''
-                podman run --rm \
-                  -v $PWD:/app \
-                  -w /app \
-                  rust:latest \
-                  cargo build --release
-                '''
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+        stage("Cargo build Rust") {
+            agent {
+                docker {
+                    image 'rust:latest'
+                }
+            }
+            steps {
+                script {
+                    gv.cargoBuild()
+                }
             }
         }
 
+        //Building image 
         stage("Build image") {
+            agent {
+                docker {
+                    image 'docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+
+            environment {
+                HOME = "${WORKSPACE}" 
+            }
+
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-repo',
-                    passwordVariable: 'PASSWORD',
-                    usernameVariable: 'USER'
-                )]) {
-                    sh '''
-                    podman build -t kayorie/learning_docker_rx7:jenkins-pipeline .
-                    echo $PASSWORD | podman login -u $USER --password-stdin
-                    podman push kayorie/learning_docker_rx7:jenkins-pipeline
-                    '''
+                script {
+                    gv.buildAndPushImage()
+                }
+            }
+        }
+        stage("Deploy!") {
+            steps {
+                script {
+                    echo "Deploying the app!"
                 }
             }
         }
     }
 }
+
