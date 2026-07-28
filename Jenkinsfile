@@ -1,10 +1,10 @@
+// Объявляем переменную для скрипта
 def gv
 
-//Comment to test branches
 pipeline {
     agent any
+
     stages {
-        //Trying to build cargo from docker agent.
         stage("Initialize Groovy script") {
             steps {
                 script {
@@ -12,10 +12,13 @@ pipeline {
                 }
             }
         }
+
         stage("Cargo build Rust") {
             agent {
                 docker {
                     image 'rust:latest'
+                    // Монтируем кэш cargo, чтобы не скачивать crate-зависимости каждый раз заново
+                    args '-v /tmp/cargo-cache:/usr/local/cargo/registry'
                 }
             }
             steps {
@@ -25,25 +28,16 @@ pipeline {
             }
         }
 
-        //Building image 
         stage("Build image") {
-            agent {
-                docker {
-                    image 'docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
-
-            environment {
-                HOME = "${WORKSPACE}" 
-            }
-
+            // Запускаем сборку прямо на ноде Jenkins, без обертки в docker:latest
+            agent any 
             steps {
                 script {
                     gv.buildAndPushImage()
                 }
             }
         }
+
         stage("Deploy!") {
             steps {
                 script {
@@ -53,4 +47,3 @@ pipeline {
         }
     }
 }
-
