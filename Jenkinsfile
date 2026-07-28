@@ -17,8 +17,6 @@ pipeline {
             agent {
                 docker {
                     image 'rust:latest'
-                    // Монтируем кэш cargo, чтобы не скачивать crate-зависимости каждый раз заново
-                    args '-v /tmp/cargo-cache:/usr/local/cargo/registry'
                 }
             }
             steps {
